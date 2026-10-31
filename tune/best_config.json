@@ -1,0 +1,8 @@
+{
+  "window": 3.0,
+  "smooth": 3,
+  "tracker": "pyin",
+  "contour": false,
+  "model": "gbm",
+  "hop_mult": 1
+}

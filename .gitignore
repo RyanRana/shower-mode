@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# built helpers (./install.sh)
+airpods_ca
+sysaudio
+
+# runtime state
+encore.log
+voice_profile.npy
+
+# large or downloaded
+data/
+models/
+tune/preds/
