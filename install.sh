@@ -18,12 +18,12 @@ mkdir -p models
 .venv/bin/python -m pip install -q --upgrade pip
 .venv/bin/python -m pip install -q -r requirements.txt
 
-PLIST=~/Library/LaunchAgents/co.noxmetals.shower-mode.plist
+PLIST=~/Library/LaunchAgents/local.shower-mode.plist
 cat > "$PLIST" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-  <key>Label</key><string>co.noxmetals.shower-mode</string>
+  <key>Label</key><string>local.shower-mode</string>
   <key>ProgramArguments</key><array>
     <string>$D/.venv/bin/python</string><string>$D/shower_mode.py</string>
   </array>

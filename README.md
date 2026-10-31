@@ -29,7 +29,7 @@ the `airpods_ca` helper tries to toggle conversation awareness over apple's aacp
 ./uninstall.sh          # remove the launchagent and turn conversation awareness back on
 ```
 
-runs at login as launchagent `co.noxmetals.shower-mode`, restarted on crash. log: `shower-mode.log`.
+runs at login as launchagent `local.shower-mode`, restarted on crash. log: `shower-mode.log`.
 
 give python **screen & system audio recording** (system settings, privacy & security), or `sysaudio` fails with `SCStreamErrorDomain -3801` and the pitch check is off. capture also stops when the screen locks or sleeps (`-3815`); shower-mode restarts it with backoff.
 
