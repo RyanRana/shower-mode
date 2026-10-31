@@ -1,12 +1,19 @@
-# encore
+# shower-mode
 
-Keeps AirPods Conversation Awareness (CA) on, except while you are singing along to the
-song that is playing. Talking, someone else talking, or singing a different song all let
-CA through. Any doubt, error, pause, or exit turns CA back on.
+**For people who sing like nobody's listening, including their AirPods.**
+
+AirPods hear you open your mouth, decide you're starting a conversation, and turn the music
+down. Right before the chorus. Every time.
+
+shower-mode runs three audio models on your Mac's mic to tell talking from singing along.
+Talk, or let someone else talk, and the AirPods still notice. Belt the bridge of the song
+that's actually playing, and they leave you alone.
+
+Any doubt, error, pause, or exit hands control back to normal AirPods behavior.
 
 ## How it works
 
-Every 0.75 s the service (`encore.py`) looks at the last few seconds of mic audio and
+Every 0.75 s the service (`shower_mode.py`) looks at the last few seconds of mic audio and
 decides "singing along" or not:
 
 1. **Lyrics match**: faster-whisper transcribes the mic; the words are fuzzy-matched
@@ -23,7 +30,7 @@ The `airpods_ca` helper tries to toggle CA over Apple's AACP protocol. On curren
 this fails: `bluetoothd` owns the AACP channel (L2CAP open returns `kIOReturnError`), and
 the private AudioAccessoryServices API that System Settings uses requires the
 `com.apple.bluetooth.system` entitlement, which only Apple-signed binaries get. So in
-practice encore runs in **volume-ducking mode**: when you talk over music (or someone
+practice shower-mode runs in **volume-ducking mode**: when you talk over music (or someone
 else talks), system volume drops to 30% and comes back once you stop or start singing.
 The helper is kept in case a future macOS or firmware opens the channel.
 
@@ -40,20 +47,20 @@ The helper is kept in case a future macOS or firmware opens the channel.
 ./uninstall.sh          # remove the LaunchAgent and turn CA back on
 ```
 
-Runs at login as LaunchAgent `co.noxmetals.encore`, restarted on crash. Log: `encore.log`.
+Runs at login as LaunchAgent `co.noxmetals.shower-mode`, restarted on crash. Log: `shower-mode.log`.
 
 Grant **Screen & System Audio Recording** to Python (System Settings, Privacy & Security),
 or `sysaudio` fails with `SCStreamErrorDomain -3801` and the pitch check is off. Capture
-also stops when the screen locks or sleeps (`-3815`); encore restarts it with backoff.
+also stops when the screen locks or sleeps (`-3815`); shower-mode restarts it with backoff.
 
 ## Check your setup
 
 ```sh
-.venv/bin/python encore.py --doctor
+.venv/bin/python shower_mode.py --doctor
 ```
 
 ```
-encore doctor
+shower-mode doctor
   ok   microphone             MacBook Air Microphone
   off  now playing            nothing playing in Spotify/Music
   ok   system audio           capturing
@@ -63,14 +70,14 @@ encore doctor
   off  voice profile          0 samples (second-voice check needs 5)
 ```
 
-Set `ENCORE_MIC` to part of a device name to use a different microphone. The AirPods mic
+Set `SHOWER_MIC` to part of a device name to use a different microphone. The AirPods mic
 is never used: it forces the low-quality call codec.
 
 ## Files
 
 | Path | What |
 | --- | --- |
-| `encore.py` | the service |
+| `shower_mode.py` | the service |
 | `melody.py` | system audio capture and pitch features |
 | `speaker.py` | second-voice check |
 | `mert_sing.py` | experimental MERT + attention detector (not used by the service) |

@@ -1,4 +1,4 @@
-"""Sing-along guard: keeps AirPods Conversation Awareness ON, except while you are
+"""shower-mode: keeps AirPods Conversation Awareness ON, except while you are
 singing along to the song that is playing.
 
 Singing = your words match the synced lyrics, or your pitch follows the song's melody
@@ -53,7 +53,7 @@ SPEAKER_SEC = 3.0            # 1.5 s is too short to tell voices apart reliably 
 MIC_BUFFER_SEC = 6.0        # longest window anything reads (pitch model uses 4 s)
 OTHER_IN_A_ROW = 2           # consecutive "other voice" verdicts before acting
 
-log = logging.getLogger("encore")
+log = logging.getLogger("shower-mode")
 
 
 # ---------- Now playing ----------
@@ -121,7 +121,7 @@ def synced_lyrics(artist: str, title: str) -> list[tuple[float, str]]:
     try:
         r = requests.get("https://lrclib.net/api/get",
                          params={"artist_name": artist, "track_name": title}, timeout=5,
-                         headers={"User-Agent": "encore/1.0"})
+                         headers={"User-Agent": "shower-mode/1.0"})
         if r.ok and r.json().get("syncedLyrics"):
             for raw in r.json()["syncedLyrics"].splitlines():
                 m = _LRC_LINE.match(raw)
@@ -201,8 +201,8 @@ BUILTIN_MIC_NAMES = ("MacBook", "Built-in", "iMac", "Mac mini", "Mac Studio")
 
 
 def mac_mic_index() -> int | None:
-    """ENCORE_MIC (substring of the device name) wins, else the Mac's built-in mic."""
-    wanted = (os.environ["ENCORE_MIC"],) if os.environ.get("ENCORE_MIC") else BUILTIN_MIC_NAMES
+    """SHOWER_MIC (substring of the device name) wins, else the Mac's built-in mic."""
+    wanted = (os.environ["SHOWER_MIC"],) if os.environ.get("SHOWER_MIC") else BUILTIN_MIC_NAMES
     for i, d in enumerate(sd.query_devices()):
         if d["max_input_channels"] > 0 and any(w in d["name"] for w in wanted):
             if "AirPods" not in d["name"]:
@@ -214,7 +214,7 @@ class Mic:
     def __init__(self) -> None:
         idx = mac_mic_index()
         if idx is None:
-            raise SystemExit("built-in microphone not found; set ENCORE_MIC to part of the device name")
+            raise SystemExit("built-in microphone not found; set SHOWER_MIC to part of the device name")
         self.buf: collections.deque[float] = collections.deque(maxlen=int(SAMPLE_RATE * MIC_BUFFER_SEC))
         self.lock = threading.Lock()
         self.stream = sd.InputStream(device=idx, channels=1, samplerate=SAMPLE_RATE,
@@ -350,9 +350,9 @@ def doctor() -> int:
     def row(ok: bool | None, name: str, detail: str) -> None:
         print(f"  {'ok ' if ok else 'off' if ok is None else 'BAD'}  {name:<22} {detail}")
 
-    print("encore doctor")
+    print("shower-mode doctor")
     idx = mac_mic_index()
-    row(idx is not None, "microphone", sd.query_devices(idx)["name"] if idx is not None else "not found (set ENCORE_MIC)")
+    row(idx is not None, "microphone", sd.query_devices(idx)["name"] if idx is not None else "not found (set SHOWER_MIC)")
 
     tr = _query_player()
     row(True if tr else None, "now playing", f"{tr.artist} - {tr.title}" if tr else "nothing playing in Spotify/Music")

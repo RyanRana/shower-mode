@@ -23,7 +23,7 @@ HOP = 320  # 20 ms frames
 TOP_CLASSES = 3
 MAX_LAG_FRAMES = 15  # +-300 ms voice/song alignment slack
 
-log = logging.getLogger("encore")
+log = logging.getLogger("shower-mode")
 
 
 class SystemAudio:

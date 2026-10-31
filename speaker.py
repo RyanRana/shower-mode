@@ -18,7 +18,7 @@ MIN_ENROLL = 5
 MAX_PROFILE = 50
 OTHER_BELOW = 0.45  # cosine similarity to your profile below this = someone else
 
-log = logging.getLogger("encore")
+log = logging.getLogger("shower-mode")
 
 
 class SpeakerCheck:

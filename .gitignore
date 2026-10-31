@@ -8,7 +8,7 @@ airpods_ca
 sysaudio
 
 # runtime state
-encore.log
+shower-mode.log
 voice_profile.npy
 
 # large or downloaded
