@@ -1,12 +1,8 @@
 # shower-mode
 
-**for people who sing like nobody's listening, including their airpods.**
+stops airpods conversation awareness from turning your music down when you sing along.
 
-airpods hear you open your mouth, decide you're starting a conversation, and turn the music down. right before the chorus. every time.
-
-shower-mode runs three audio models on your mac's mic to tell talking from singing along. talk, or let someone else talk, and the airpods still notice. belt the bridge of the song that's actually playing, and they leave you alone.
-
-any doubt, error, pause or exit hands control back to normal airpods behavior.
+conversation awareness treats any voice as the start of a conversation. shower-mode tells singing along apart from talking using three models on the mac's built-in mic: lyrics, pitch and speaker. talking, or someone else talking, still gets through. if anything is uncertain or fails, it falls back to normal airpods behavior.
 
 ## how it works
 
